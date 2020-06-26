@@ -1,26 +1,20 @@
+//gfg solution
 class Solution {
 public:
     int firstMissingPositive(vector<int>& nums) {
-        if(nums.size()==0) return 1;
-        int i=0;
-        int j=nums.size()-1;
-        while(i<nums.size() && i<=j){ //moving all 0 and negatives at end of array
-            if(nums[i]<=0){
-                swap(nums[i],nums[j]);
-                j--;
-            }else{
-                i++;
+        int n= nums.size();
+        for(int i=0; i<n; i++) {
+            if(nums[i]<=0 || nums[i]-1>=n) continue;
+            
+            int val= nums[i];
+            while(nums[val-1]!=val) {
+                int nextval= nums[val-1];
+                nums[val-1]= val;
+                val= nextval;
+                if(val<=0 || val-1>=n) break;
             }
         }
-        for(i=0;i<=j && i<nums.size();i++){ //placing positive ints at their correct indices
-            if(nums[i]>0 && nums[i]-1<=j && nums[nums[i]-1]!=nums[i]){
-                swap(nums[i],nums[nums[i]-1]);
-                if(nums[i]<=j && nums[i]!=i+1) i--;
-            }
-        }
-        for(i=0;i<=j && i<nums.size();i++){
-            if(nums[i]!=i+1) return i+1;
-        }
-        return j+2;
+        for(int i=0; i<n; i++) if(nums[i]!=i+1) return i+1;
+        return n+1;
     }
 };
